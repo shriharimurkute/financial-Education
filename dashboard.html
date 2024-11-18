@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Management Dashboard</title>
+ <style>
+    body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+
+.container {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+.income-expense {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.income, .expense {
+  background: #444;
+  padding: 20px;
+  border-radius: 10px;
+  width: 45%;
+}
+
+.income button, .expense button {
+  background: #ff7e5f;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  margin-top: 10px;
+}
+
+.income button:hover, .expense button:hover {
+  background: #feb47b;
+}
+
+h2 {
+  margin: 0;
+}
+
+ </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Financial Management Dashboard</h1>
+    </header>
+    <section class="balance">
+      <h2>Balance: <span id="balance">$0.00</span></h2>
+    </section>
+    <section class="income-expense">
+      <div class="income">
+        <h2>Income: <span id="income">$0.00</span></h2>
+        <button onclick="addTransaction('income')">Add Income</button>
+      </div>
+      <div class="expense">
+        <h2>Expenses: <span id="expense">$0.00</span></h2>
+        <button onclick="addTransaction('expense')">Add Expense</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+ let balance = parseFloat(localStorage.getItem('balance')) || 0;
+let income = parseFloat(localStorage.getItem('income')) || 0;
+let expense = parseFloat(localStorage.getItem('expense')) || 0;
+
+function updateUI() {
+  document.getElementById('balance').innerText = `₹${balance.toFixed(2)}`;
+  document.getElementById('income').innerText = `₹${income.toFixed(2)}`;
+  document.getElementById('expense').innerText = `₹${expense.toFixed(2)}`;
+}
+
+function addTransaction(type) {
+  const amount = parseFloat(prompt(`Enter the ${type} amount:`));
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid amount');
+    return;
+  }
+
+  if (type === 'income') {
+    income += amount;
+    balance += amount;
+  } else if (type === 'expense') {
+    expense += amount;
+    balance -= amount;
+  }
+  
+  localStorage.setItem('balance', balance);
+  localStorage.setItem('income', income);
+  localStorage.setItem('expense', expense);
+
+  updateUI();
+}
+
+updateUI();
+
+
+  </script>
+</body>
+</html>

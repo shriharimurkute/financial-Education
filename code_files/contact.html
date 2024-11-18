@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        /* Reset and Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4f5b62, #2b2f36);
+            color: #f5f5f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        nav ul li a {
+            color: #fff;
+            transition: color 0.3s ease-in-out;
+            padding: 10px;
+        }
+
+        nav ul li a:hover {
+            color: #2ecc71;
+        }
+
+        /* Header & Intro Section */
+        .header-content {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .header-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .header-content p {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* Contact Form */
+        .contact-container {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 50px auto;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #444;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2ecc71;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        /* Contact Information */
+        .contact-info {
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        /* Map Section */
+        .map-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .map-container:hover iframe {
+            transform: scale(1.05);
+        }
+
+        /* Newsletter */
+        .newsletter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .newsletter-modal .modal-content {
+            background: #333;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .newsletter-modal input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .newsletter-modal button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .newsletter-modal button:hover {
+            background-color: #27ae60;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: #bbb;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        footer .social-media a {
+            margin: 0 15px;
+            display: inline-block;
+        }
+
+        footer .social-media img {
+            width: 35px;
+            height: 35px;
+            transition: transform 0.3s ease;
+        }
+
+        footer .social-media img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-container {
+                padding: 40px 15px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            footer .social-media a {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1 style="color: #fff;">FIN</h1>
+            </div>
+            <ul>
+                <li><a href="/index.html">HOME</a></li>
+                <li><a href="#con">Contact Us</a></li>
+                <li><a href="#con_info">Address</a></li>
+                <li><a href="#map">Map</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="header-content">
+        <h1>Get in Touch</h1>
+        <p>We’d love to hear from you! Reach out to us for any inquiries or support.</p>
+    </div>
+
+    <div class="contact-container" id="con">
+        <h2>Contact Form</h2>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <div class="contact-info" id="con_info">
+        <h2>Our Office</h2>
+        <p>123 Financial Street, Mumbai, Maharashtra, India</p>
+        <p>Email: contact@financemgmt.com</p>
+        <p>Phone: +91 12345 67890</p>
+    </div>
+
+    <div class="map-container" id="map">
+        <h2>Our Location</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=..." frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="newsletter-modal" id="newsletterModal">
+        <div class="modal-content">
+            <h3>Subscribe to Our Newsletter</h3>
+            <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+            <button id="subscribeBtn">Subscribe</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Financial Management & Education. All rights reserved.</p>
+        <div class="social-media">
+            <a href="https://www.facebook.com"><img src="/images/facebook_logo.png" alt="Facebook"></a>
+            <a href="https://www.twitter.com"><img src="/images/twitter logo.png "alt="Twitter"></a>
+            <a href="https://www.linkedin.com"><img src="/images/linkdin.jpg "alt="LinkedIn"></a>
+            <a href="https://www.instagram.com"><img src="/images/instagram_logo.jpg" alt="Instagram"></a>
+        </div>
+    </footer>
+
+    <script>
+        // Newsletter Modal Toggle
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        const newsletterModal = document.getElementById('newsletterModal');
+        subscribeBtn.addEventListener('click', () => {
+            newsletterModal.style.display = 'flex';
+        });
+
+        // Handle Form Submission
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Message sent successfully!');
+            form.reset();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management - Transactions</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4a90e2;
+        }
+
+        /* Vertical Navigation Bar */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #3498db;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0 15px 15px 0;
+        }
+
+        .sidebar a {
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #2980b9;
+        }
+
+        .sidebar a.active {
+            background-color: #2980b9;
+        }
+
+        /* Main Content */
+        .container {
+            margin-left: 250px; /* Adjust for the sidebar width */
+            padding: 20px;
+            flex: 1;
+        }
+
+        /* Form and table styling */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        button.transaction,
+        button.reset {
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            width: 100%;
+        }
+
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus {
+            border-color: #3498db;
+        }
+
+        .transaction {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .transaction:hover {
+            background-color: #45a049;
+        }
+
+        .reset {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .reset:hover {
+            background-color: #c0392b;
+        }
+
+        .positive {
+            color: green;
+        }
+
+        .negative {
+            color: red;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f6f7;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #ecf0f1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .pagination button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .container {
+                margin-left: 200px;
+            }
+
+            .form-group {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            .transaction {
+                font-size: 14px;
+            }
+
+            .pagination button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <a href="/code_files/index.html" class="active">Home</a>
+        <a href="/code_files/my_Activities.html">Activities</a>
+        <a href="/code_files/transactions_managment.html">Transactions</a>
+        <a href="/allTrackers/Trackers.html">Trackers</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <h1>Transaction Management</h1>
+
+        <!-- Transaction Form -->
+        <form id="transaction-form">
+            <div class="form-group">
+                <input type="text" id="amount" placeholder="Amount" required autofocus>
+                <input type="text" id="description" placeholder="Description" required>
+                <input type="datetime-local" id="datetime" placeholder="Date and Time" required>
+                <button class="transaction" type="submit">Add Transaction</button>
+                <button type="button" class="reset" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+
+        <!-- Transaction Table -->
+        <h2>Transaction History</h2>
+        <input type="text" id="search" placeholder="Search by date or description" style="margin-bottom: 20px; padding: 12px; font-size: 16px; border-radius: 5px; width: 100%; border: 1px solid #ccc;">
+
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Date</th>
+                    <th>Description</th>
+                    <th onclick="sortTable(2)">Amount</th>
+                    <th>Balance</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="transaction-table-body">
+                <!-- Transactions will be dynamically added here -->
+            </tbody>
+        </table>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        let editRow = null;
+        let transactions = [];
+        const rowsPerPage = 10;
+        let currentPage = 1;
+
+        // Transaction form submit handler
+        document.getElementById('transaction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const amount = document.getElementById('amount').value;
+            const description = document.getElementById('description').value;
+            const datetime = document.getElementById('datetime').value;
+
+            if (amount && description && datetime) {
+                const transaction = {
+                    date: new Date(datetime).toLocaleDateString(),
+                    description: description,
+                    amount: parseFloat(amount)
+                };
+
+                // If editing a transaction, update the existing entry
+                if (editRow !== null) {
+                    transactions[editRow] = transaction;
+                    editRow = null;
+                } else {
+                    transactions.push(transaction);
+                }
+
+                // Render the table and pagination
+                renderTable();
+                renderPagination();
+                updateSummary();
+
+                // Clear the form and focus on the Amount field for the next entry
+                resetForm();
+            }
+        });
+
+        // Reset the form fields
+        function resetForm() {
+            document.getElementById('amount').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('datetime').value = '';
+            document.getElementById('amount').focus();
+        }
+
+        // Render the transaction table
+        function renderTable(filteredTransactions = transactions) {
+            const tableBody = document.getElementById('transaction-table-body');
+            tableBody.innerHTML = '';
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedTransactions = filteredTransactions.slice(start, end);
+
+            let runningBalance = 0;
+
+            paginatedTransactions.forEach((transaction, index) => {
+                const newRow = document.createElement('tr');
+
+                const dateCell = document.createElement('td');
+                dateCell.textContent = transaction.date;
+                newRow.appendChild(dateCell);
+
+                const descriptionCell = document.createElement('td');
+                descriptionCell.textContent = transaction.description;
+                newRow.appendChild(descriptionCell);
+
+                const amountCell = document.createElement('td');
+                amountCell.textContent = transaction.amount;
+                amountCell.className = transaction.amount < 0 ? 'negative' : 'positive';
+                newRow.appendChild(amountCell);
+
+                runningBalance += transaction.amount;
+                const balanceCell = document.createElement('td');
+                balanceCell.textContent = runningBalance.toFixed(2);
+                balanceCell.className = runningBalance < 0 ? 'negative' : 'positive';
+                newRow.appendChild(balanceCell);
+
+                const actionCell = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.className = 'btn btn-sm btn-warning';
+                editButton.addEventListener('click', function() {
+                    document.getElementById('amount').value = transaction.amount;
+                    document.getElementById('description').value = transaction.description;
+                    document.getElementById('datetime').value = new Date(transaction.date).toISOString().slice(0, 16);
+                    editRow = index;
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'btn btn-sm btn-danger';
+                deleteButton.addEventListener('click', function() {
+                    transactions.splice(index, 1);
+                    renderTable();
+                    renderPagination();
+                });
+
+                actionCell.appendChild(editButton);
+                actionCell.appendChild(deleteButton);
+                newRow.appendChild(actionCell);
+
+                tableBody.appendChild(newRow);
+            });
+        }
+
+        // Render Pagination buttons
+        function renderPagination() {
+            const totalPages = Math.ceil(transactions.length / rowsPerPage);
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.addEventListener('click', function() {
+                    currentPage = i;
+                    renderTable();
+                });
+                paginationDiv.appendChild(pageButton);
+            }
+        }
+
+        // Handle search filter
+        document.getElementById('search').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            const filteredTransactions = transactions.filter(transaction => {
+                return (
+                    transaction.description.toLowerCase().includes(searchText) ||
+                    transaction.date.includes(searchText)
+                );
+            });
+            renderTable(filteredTransactions);
+            renderPagination();
+        });
+    </script>
+</body>
+</html>

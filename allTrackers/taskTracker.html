@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #2d3e50;
+            padding: 15px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #0a0a0a;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* General Container Styling */
+        .container, .container1, .container2 {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container1 {
+            background-color: #4caf50;
+        }
+
+        .container2 {
+            background-color: #71a5ed;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: #333;
+        }
+
+        form input, form button {
+            padding: 12px;
+            font-size: 1em;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form input {
+            width: 70%;
+        }
+
+        form button {
+            width: 25%;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Task List Styling */
+        ul, #task-list, #habit-list, #water-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        li button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        li button:hover {
+            background-color: #c62828;
+        }
+
+        li input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Total Water Intake */
+        .total-intake {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin-bottom: 10px;
+            }
+
+            form input, form button {
+                width: 100%;
+            }
+
+            .container, .container1, .container2 {
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav .logo {
+                font-size: 1.2em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">TrackIt</div>
+        <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/allTrackers/Trackers.html">Trakers</a></li>
+            <li><a href="#habit">Habits</a></li>
+            <li><a href="#water">Water</a></li>
+        </ul>
+    </nav>
+
+    <!-- Task Tracker -->
+    <div class="container">
+        <h1>Task Tracker</h1>
+        <form id="task-form">
+            <input type="text" id="task-name" placeholder="Task Name" required />
+            <button type="submit">Add Task</button>
+        </form>
+        <ul id="task-list"></ul>
+    </div>
+
+    <!-- Habit Tracker -->
+    <div class="container1" id="habit">
+        <h1>Habit Tracker</h1>
+        <form id="habit-form">
+            <input type="text" id="habit-name" placeholder="Habit Name" required />
+            <button type="submit">Add Habit</button>
+        </form>
+        <ul id="habit-list"></ul>
+    </div>
+
+    <!-- Water Intake Tracker -->
+    <div class="container2" id="water">
+        <h1>Water Intake Tracker</h1>
+        <form id="water-form">
+            <input type="number" id="water-amount" placeholder="Amount (ml)" required />
+            <button type="submit">Add Intake</button>
+        </form>
+        <ul id="water-list"></ul>
+        <div class="total-intake">
+            <strong>Total Intake:</strong> <span id="total-intake">0</span> ml
+        </div>
+    </div>
+
+    <script>
+        // Task Tracker
+        const tasks = [];
+        document.getElementById('task-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const taskName = document.getElementById('task-name').value;
+            if (taskName) addTask(taskName);
+        });
+
+        function addTask(name) {
+            const task = { name, timestamp: Date.now(), completed: false };
+            tasks.push(task);
+            tasks.sort((a, b) => b.timestamp - a.timestamp);
+            displayTasks();
+        }
+
+        function toggleTaskCompletion(timestamp) {
+            const task = tasks.find(t => t.timestamp === timestamp);
+            if (task) task.completed = !task.completed;
+            displayTasks();
+        }
+
+        function removeTask(timestamp) {
+            const index = tasks.findIndex(t => t.timestamp === timestamp);
+            if (index !== -1) tasks.splice(index, 1);
+            displayTasks();
+        }
+
+        function displayTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = tasks.map(task => `
+                <li style="text-decoration: ${task.completed ? 'line-through' : 'none'}">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTaskCompletion(${task.timestamp})">
+                    ${task.name}
+                    <button onclick="removeTask(${task.timestamp})">Remove</button>
+                </li>
+            `).join('');
+        }
+
+        // Habit Tracker
+        const habits = [];
+        document.getElementById('habit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const habitName = document.getElementById('habit-name').value;
+            if (habitName) addHabit(habitName);
+        });
+
+        function addHabit(name) {
+            const habit = { name, timestamp: Date.now() };
+            habits.push(habit);
+            habits.sort((a, b) => b.timestamp - a.timestamp);
+            displayHabits();
+        }
+
+        function removeHabit(timestamp) {
+            const index = habits.findIndex(h => h.timestamp === timestamp);
+            if (index !== -1) habits.splice(index, 1);
+            displayHabits();
+        }
+
+        function displayHabits() {
+            const habitList = document.getElementById('habit-list');
+            habitList.innerHTML = habits.map(habit => `
+                <li>
+                    ${habit.name}
+                    <button onclick="removeHabit(${habit.timestamp})">Remove</button>
+                </li>
+            `).join('');
+        }
+
+        // Water Intake Tracker
+        const entries = [];
+        document.getElementById('water-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const waterAmount = parseFloat(document.getElementById('water-amount').value);
+            if (!isNaN(waterAmount)) addWaterIntake(waterAmount);
+        });
+
+        function addWaterIntake(amount) {
+            const entry = { amount, timestamp: Date.now() };
+            entries.push(entry);
+            entries.sort((a, b) => b.timestamp - a.timestamp);
+            displayEntries();
+            updateTotalIntake(amount);
+        }
+
+        function removeWaterIntake(timestamp) {
+            const index = entries.findIndex(e => e.timestamp === timestamp);
+            if (index !== -1) entries.splice(index, 1);
+            displayEntries();
+        }
+
+        function displayEntries() {
+            const waterList = document.getElementById('water-list');
+            waterList.innerHTML = entries.map(entry => `
+                <li>
+                    ${entry.amount} ml
+                    <button onclick="removeWaterIntake(${entry.timestamp})">Remove</button>
+                </li>
+            `).join('');
+        }
+
+        function updateTotalIntake(amount) {
+            const totalIntakeElement = document.getElementById('total-intake');
+            const currentTotal = parseFloat(totalIntakeElement.textContent);
+            totalIntakeElement.textContent = (currentTotal + amount).toFixed(2);
+        }
+    </script>
+</body>
+</html>
