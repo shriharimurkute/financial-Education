@@ -174,7 +174,7 @@ body.plcalculate {
 h2 {
     color: white;
 }
-.revenue-tracker{
+.revenue{
     text-align: center;
     background-color: rgb(200, 202, 198);
     width: 500px;
@@ -204,7 +204,7 @@ h2 {
     font-size:24px;
     font-weight: bold;
     margin-top: 20px;
-    font-size: 1.2em;
+    font-size: 1.2rem;
 
 }
 /*cash flow tracker */
@@ -279,7 +279,61 @@ button.newpage{
 .newpage:hover{
     background-color:green;
 }
+
     </style>
+    <style>
+        /* Existing styles here */
+        
+        /* Revenue Tracker Responsive Design */
+        .revenue {
+            text-align: center;
+            background-color: rgb(200, 202, 198);
+            width: 500px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .revenue {
+                width: 90%; /* Make it adapt to smaller screens */
+                padding: 20px; /* Add extra padding for smaller devices */
+            }
+        
+            #revenue-input {
+                width: 100%; /* Input takes full width */
+                font-size: 1rem; /* Adjust font size for readability */
+            }
+        
+            #add-revenue-btn {
+                width: 100%; /* Button takes full width */
+                margin-top: 10px; /* Add spacing for better layout */
+            }
+        
+            .revenue-display {
+                font-size: 1.1rem; /* Adjust text size */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .revenue {
+                padding: 15px;
+            }
+        
+            #revenue-input {
+                font-size: 0.9rem;
+                padding: 8px; /* Adjust padding for smaller input size */
+            }
+        
+            #add-revenue-btn {
+                padding: 8px 10px; /* Adjust button size */
+                font-size: 0.9rem; /* Reduce font size */
+            }
+        
+            .revenue-display {
+                font-size: 1rem; /* Further adjust text size */
+            }
+        }
+        </style>
 </head>
 <body>
     <header>
@@ -351,7 +405,7 @@ button.newpage{
     </div>
     &nbsp;&nbsp;
     <!--revenue-->
-    <div class="revenue-tracker" id="revenue">
+    <div class="revenue" id="revenue">
         <h2 style="color:black;">Revenue Tracker</h2>
         <input type="number" id="revenue-input" placeholder="Enter Revenue" required>
         <button  id="add-revenue-btn" type="button">Add Revenue</button>
